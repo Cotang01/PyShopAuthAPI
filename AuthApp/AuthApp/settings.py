@@ -158,13 +158,16 @@ REST_FRAMEWORK = {
     ),
 }
 
-CONSTANCE_BACKEND = 'constance.backends.redisd.RedisBackend'
-
-CONSTANCE_REDIS_CONNECTION = {
-    'host': env('REDIS_HOST'),
-    'port': env('REDIS_PORT'),
-    'db': env('REDIS_DB'),
-}
+match env('CONSTANCE_BACKEND'):
+    case 'django':
+        CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+    case 'redis':
+        CONSTANCE_BACKEND = 'constance.backends.redisd.RedisBackend'
+        CONSTANCE_REDIS_CONNECTION = {
+            'host': env('REDIS_HOST'),
+            'port': env('REDIS_PORT'),
+            'db': env('REDIS_DB'),
+        }
 
 CONSTANCE_CONFIG = {
     'ACCESS_TOKEN_LIFETIME_SECONDS': (30, 'Access token lifetime in seconds.'),
