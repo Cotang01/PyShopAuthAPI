@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./AuthApp:/app
+    command: >
+      sh -c 'python manage.py migrate && 
+             python manage.py runserver 0.0.0.0:8000'
+  redis:
+    image: 'redis:alpine'
+    restart: always
