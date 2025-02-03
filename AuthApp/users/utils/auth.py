@@ -13,7 +13,7 @@ def generate_access_token(user):
     payload = {
         'user_id': user.id,
         'token_type': 'access',
-        'exp_date': (datetime.now(UTC) + timedelta(
+        'exp': (datetime.now(UTC) + timedelta(
             seconds=config.ACCESS_TOKEN_LIFETIME_SECONDS)).isoformat()
     }
     return jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
@@ -23,7 +23,7 @@ def generate_refresh_token_payload(user):
     payload = {
         'user_id': user.id,
         'token_type': 'refresh',
-        'exp_date': (datetime.now(UTC) + timedelta(
+        'exp': (datetime.now(UTC) + timedelta(
             days=config.REFRESH_TOKEN_LIFETIME_DAYS)).isoformat()
     }
     return payload
@@ -38,9 +38,9 @@ def delete_refresh_token_obj_by_token(model, token):
 
 
 def create_refresh_token_obj(model, payload, user):
-    exp_date = payload['exp_date']
+    exp = payload['exp']
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm='HS256')
-    return model.objects.create(user=user, token=token, exp_date=exp_date)
+    return model.objects.create(user=user, token=token, exp=exp)
 
 
 def get_user_from_token(token):

@@ -23,10 +23,10 @@ class AuthUser(AbstractBaseUser, PermissionsMixin):
 class RefreshToken(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     token = models.CharField(max_length=255, unique=True)
-    exp_date = models.DateTimeField()
+    exp = models.DateTimeField()
 
     def is_valid(self):
-        return self.exp_date > timezone.now()
+        return self.exp > timezone.now()
 
     def __str__(self):
-        return f'{self.user} up_to {self.exp_date}'
+        return f'{self.user} up_to {self.exp}'
